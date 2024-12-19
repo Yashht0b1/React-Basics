@@ -1,40 +1,49 @@
 let score = 50;
-let wicket = 3;
+let wicket = 0;
+let ballWiseResult = []
 
-function AddOne(){
-    score+=1;
-    rootElement.render(<App/>);
+function AddRuns(num){
+    if (wicket<10){
+        ballWiseResult.push(num);
+        score+=num;
+        rootElement.render(<App/>);}
+        console.log(ballWiseResult);
 }
 
-function AddTwo(){
-    score+=2;
-    rootElement.render(<App/>);
-
-}
-
-function AddThree(){
-    score+=3;
-    rootElement.render(<App/>);
-}
-
-function AddFour(){
-    score+=4;
-    rootElement.render(<App/>);
-}
-
-function AddFive(){
-    score+=5;
-    rootElement.render(<App/>);
-}
-
-function AddSix(){
-    score+=6;
-    rootElement.render(<App/>);
-}
 
 function AddWicket(){
-    wicket+=1;
-    rootElement.render(<App/>);
+    if (wicket<10){
+        ballWiseResult.push("W");
+        wicket+=1;
+        rootElement.render(<App/>);
+        console.log(ballWiseResult)
+    }
+}
+
+const ScoreButtons = () =>{
+    return(
+    <div>
+    <button onClick={()=>AddRuns(0)}>0</button>
+    <button onClick={()=>AddRuns(1)}>1</button>
+    <button onClick={()=>AddRuns(2)}>2</button>
+    <button onClick={()=>AddRuns(3)}>3</button>
+    <button onClick={()=>AddRuns(4)}>4</button>
+    <button onClick={()=>AddRuns(5)}>5</button>
+    <button onClick={()=>AddRuns(6)}>6</button>
+    <button onClick={AddWicket}>Wicket</button>
+    </div>)
+}
+
+const Result = () =>{
+    return(
+        <div>
+            {ballWiseResult.map((res,index)=>(
+                <>
+                {index%6===0?<br/>:null}
+                <span key={index}>{res===0?<strong>.</strong>:res}&nbsp;&nbsp;&nbsp;</span>
+                </>))}
+        </div>
+    )
 }
 
 const App = () => {
@@ -43,13 +52,8 @@ const App = () => {
       <>
         <h1>Score-Keeper</h1>
         <h2>Score: {score}/{wicket}</h2>
-        <button onClick={AddOne}>1</button>
-        <button onClick={AddTwo}>2</button>
-        <button onClick={AddThree}>3</button>
-        <button onClick={AddFour}>4</button>
-        <button onClick={AddFive}>5</button>
-        <button onClick={AddSix}>6</button>
-        <button onClick={AddWicket}>Wicket</button>
+        <ScoreButtons/>
+        <Result/>
       </>
     );
   };
