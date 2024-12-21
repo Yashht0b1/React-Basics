@@ -1,24 +1,20 @@
 let score = 50;
 let wicket = 0;
-let ballWiseResult = []
+let ballWiseResult = [];
+let hit = 0;
+let comment = React.createRef();
 
 function AddRuns(num){
-    if (wicket<10){
-        ballWiseResult.push(num);
-        score+=num;
-        rootElement.render(<App/>);}
-        console.log(ballWiseResult);
+    hit = num;
+    rootElement.render(<App/>);
 }
 
 
 function AddWicket(){
-    if (wicket<10){
-        ballWiseResult.push("W");
-        wicket+=1;
-        rootElement.render(<App/>);
-        console.log(ballWiseResult)
-    }
+    hit = "W";
+    rootElement.render(<App/>);
 }
+
 
 const ScoreButtons = () =>{
     return(
@@ -32,6 +28,31 @@ const ScoreButtons = () =>{
     <button onClick={()=>AddRuns(6)}>6</button>
     <button onClick={AddWicket}>Wicket</button>
     </div>)
+}
+
+function handleSubmit(event){
+        event.preventDefault()
+        if(hit == "W"){
+            wicket+=1;
+        }else{
+            score+=hit;
+        }
+        ballWiseResult.unshift(
+            <span>{`${hit}, ${comment.current.value}`}</span>
+        )
+        hit = 0;
+        comment.current.value="";
+        rootElement.render(<App/>)
+}
+
+const Form = () =>{
+    return(
+        <form onSubmit={handleSubmit}>
+            <input value={hit}/>
+            <input ref={comment} placeholder="Add a comment"/>
+            <button>Submit</button>
+        </form>
+    )
 }
 
 const Result = () =>{
@@ -53,7 +74,13 @@ const App = () => {
         <h1>Score-Keeper</h1>
         <h2>Score: {score}/{wicket}</h2>
         <ScoreButtons/>
-        <Result/>
+        {/* <Result/> */}
+        <br/>
+        {<Form/>}
+        <hr/>
+        {ballWiseResult.map((res,index)=>(
+            <p key={index}>{res}</p>
+        ))}
       </>
     );
   };
